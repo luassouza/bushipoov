@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="862.0" prefWidth="738.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="poov.doacaovisual.TelaDoadorPrincipalController">
+   <children>
+      <TabPane prefHeight="400.0" prefWidth="738.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Doador">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="369.0" prefWidth="615.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="18.0" text="Código:" />
+                        <TextField fx:id="textFieldNomeDoador" layoutX="71.0" layoutY="46.0" />
+                        <Label layoutX="14.0" layoutY="50.0" text="Nome:" />
+                        <TextField fx:id="textFieldCPFDoador" layoutX="71.0" layoutY="79.0" />
+                        <Label layoutX="14.0" layoutY="83.0" text="CPF:" />
+                        <Label layoutX="15.0" layoutY="112.0" text="Contato:" />
+                        <TextField fx:id="textFieldContatoDoador" layoutX="71.0" layoutY="108.0" />
+                        <TitledPane animated="false" layoutX="15.0" layoutY="141.0" text="Tipo Sanguineo">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="154.0" prefWidth="169.0">
+                                 <children>
+                                    <RadioButton fx:id="radioButtonQualquerTipo" layoutX="49.0" layoutY="14.0" mnemonicParsing="false" onAction="#radioButtonQualquerTipoClicado" text="Qualquer um" />
+                                    <RadioButton fx:id="radioButtonA" layoutX="49.0" layoutY="44.0" mnemonicParsing="false" onAction="#radioButtonAClicado" text="A" />
+                                    <RadioButton fx:id="radioButtonB" layoutX="49.0" layoutY="72.0" mnemonicParsing="false" onAction="#radioButtonBClicado" text="B" />
+                                    <RadioButton fx:id="radioButtonO" layoutX="48.0" layoutY="126.0" mnemonicParsing="false" onAction="#radioButtonOClicado" text="O" />
+                                    <RadioButton fx:id="radioButtonAB" layoutX="49.0" layoutY="102.0" mnemonicParsing="false" onAction="#radioButtonABClicado" text="AB" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </TitledPane>
+                        <TitledPane animated="false" layoutX="198.0" layoutY="141.0" text="RH">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="94.0" prefWidth="166.0">
+                                 <children>
+                                    <RadioButton fx:id="radioButtonQualquerRH" layoutX="49.0" layoutY="14.0" mnemonicParsing="false" onAction="#radioButtonQualquerRHClicado" text="Qualquer um" />
+                                    <RadioButton fx:id="radioButtonPositivo" layoutX="49.0" layoutY="44.0" mnemonicParsing="false" onAction="#radioButtonPositivoClicado" text="+" />
+                                    <RadioButton fx:id="radioButtonNegativo" layoutX="49.0" layoutY="72.0" mnemonicParsing="false" onAction="#radioButtonNegativoClicado" text="-" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                        <Separator layoutX="453.0" layoutY="70.0" orientation="VERTICAL" prefHeight="200.0" />
+                        <Button fx:id="buttonCadastrarDoador" layoutX="493.0" layoutY="158.0" mnemonicParsing="false" onAction="#buttonCadastrarDoadorClicado" text="Cadastrar Doador" />
+                        <Button fx:id="buttonBuscarDoador" layoutX="126.0" layoutY="331.0" mnemonicParsing="false" onAction="#buttonBuscarDoadorClicado" text="Buscar" />
+                        <Button fx:id="buttonLimparDoador" layoutX="198.0" layoutY="331.0" mnemonicParsing="false" onAction="#buttonLimparDoadorClicado" text="Limpar" />
+                        <Separator layoutX="14.0" layoutY="368.0" prefHeight="3.0" prefWidth="704.0" />
+                        <TextField fx:id="textFieldCodigoDoador" layoutX="71.0" layoutY="14.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Doação">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <TableView fx:id="tableViewDoador" layoutY="411.0" prefHeight="357.0" prefWidth="738.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="Código" />
+          <TableColumn prefWidth="200.0" text="Nome" />
+            <TableColumn prefWidth="162.0" text="CPF" />
+            <TableColumn prefWidth="141.0" text="Contato" />
+            <TableColumn prefWidth="120.0" text="Tipo Sanguíneo" />
+            <TableColumn prefWidth="39.0" text="RH" />
+        </columns>
+      </TableView>
+      <Button fx:id="buttonCadastrarDoacao" layoutX="45.0" layoutY="802.0" mnemonicParsing="false" onAction="#buttonCadastrarDoacaoClicado" text="Cadastrar Doação" />
+      <Button fx:id="buttonVerDoacao" layoutX="248.0" layoutY="802.0" mnemonicParsing="false" onAction="#buttonVerDoacaoClicado" text="Ver Doações" />
+      <Button fx:id="buttonAlterarDoador" layoutX="408.0" layoutY="802.0" mnemonicParsing="false" onAction="#buttonAlterarDoadorClicado" text="Alterar Doador" />
+      <Button fx:id="buttonRemoverDoador" layoutX="560.0" layoutY="802.0" mnemonicParsing="false" onAction="#buttonRemoverDoadorClicado" text="Remover Doador" />
+   </children>
+</AnchorPane>

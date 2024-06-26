@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="862.0" prefWidth="738.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="poov.doacaovisual.TelaDoacaoPrincipalController">
+   <children>
+      <TabPane prefHeight="505.0" prefWidth="738.0" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab text="Doador">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="474.0" prefWidth="738.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="18.0" text="Código do Doador:" />
+                        <TextField fx:id="textFieldNomeDoador" layoutX="71.0" layoutY="46.0" />
+                        <Label layoutX="14.0" layoutY="50.0" text="Nome:" />
+                        <TextField fx:id="textFieldCPFDoador" layoutX="71.0" layoutY="79.0" />
+                        <Label layoutX="14.0" layoutY="83.0" text="CPF:" />
+                        <Label layoutX="15.0" layoutY="112.0" text="Contato:" />
+                        <TextField fx:id="textFieldContatoDoador" layoutX="71.0" layoutY="108.0" />
+                        <TitledPane animated="false" layoutX="15.0" layoutY="141.0" text="Tipo Sanguineo">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="154.0" prefWidth="169.0">
+                                 <children>
+                                    <RadioButton fx:id="radioButtonQualquerTipo" layoutX="49.0" layoutY="14.0" mnemonicParsing="false" onAction="#radioButtonQualquerTipoClicado" text="Qualquer um" />
+                                    <RadioButton fx:id="radioButtonA" layoutX="49.0" layoutY="44.0" mnemonicParsing="false" onAction="#radioButtonAClicado" text="A" />
+                                    <RadioButton fx:id="radioButtonB" layoutX="49.0" layoutY="72.0" mnemonicParsing="false" onAction="#radioButtonBClicado" text="B" />
+                                    <RadioButton fx:id="radioButtonO" layoutX="48.0" layoutY="126.0" mnemonicParsing="false" onAction="#radioButtonOClicado" text="O" />
+                                    <RadioButton fx:id="radioButtonAB" layoutX="49.0" layoutY="102.0" mnemonicParsing="false" onAction="#radioButtonABClicado" text="AB" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                        <TitledPane animated="false" layoutX="17.0" layoutY="331.0" text="RH">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="94.0" prefWidth="166.0">
+                                 <children>
+                                    <RadioButton fx:id="radioButtonQualquerRH" layoutX="49.0" layoutY="14.0" mnemonicParsing="false" onAction="#radioButtonQualquerRHClicado" text="Qualquer um" />
+                                    <RadioButton fx:id="radioButtonPositivo" layoutX="49.0" layoutY="44.0" mnemonicParsing="false" onAction="#radioButtonPositivoClicado" text="+" />
+                                    <RadioButton fx:id="radioButtonNegativo" layoutX="49.0" layoutY="72.0" mnemonicParsing="false" onAction="#radioButtonNegativoClicado" text="-" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                        <TextField fx:id="textFieldCodigoDoador" layoutX="124.0" layoutY="14.0" />
+                        <Label layoutX="402.0" layoutY="18.0" text="Código da Doação:" />
+                        <TextField fx:id="textFieldCodigoDoacao" layoutX="504.0" layoutY="14.0" />
+                        <Label layoutX="402.0" layoutY="50.0" text="Volume entre" />
+                        <TextField fx:id="textFieldVolumeInf" layoutX="478.0" layoutY="46.0" prefHeight="25.0" prefWidth="53.0" />
+                        <Label layoutX="538.0" layoutY="50.0" text="e" />
+                        <TextField fx:id="textFieldVolumeSup" layoutX="553.0" layoutY="46.0" prefHeight="25.0" prefWidth="53.0" />
+                        <Label layoutX="402.0" layoutY="83.0" text="Data entre" />
+                        <DatePicker fx:id="textFieldDataInf" layoutX="466.0" layoutY="79.0" prefHeight="25.0" prefWidth="101.0" />
+                        <Label layoutX="579.0" layoutY="83.0" text="e" />
+                        <DatePicker fx:id="textFieldVolumeSup" layoutX="599.0" layoutY="79.0" prefHeight="25.0" prefWidth="95.0" />
+                        <Label layoutX="402.0" layoutY="121.0" text="Hora entre" />
+                        <TextField fx:id="textFieldHoraInf" layoutX="464.0" layoutY="117.0" prefHeight="25.0" prefWidth="72.0" />
+                        <Label layoutX="539.0" layoutY="121.0" text="e" />
+                        <TextField fx:id="textFieldHoraSup" layoutX="553.0" layoutY="117.0" prefHeight="25.0" prefWidth="71.0" />
+                        <Button fx:id="buttonBuscarDoador" layoutX="325.0" layoutY="450.0" mnemonicParsing="false" onAction="#buttonBuscarDoadorClicado" text="Buscar" />
+                        <Button fx:id="buttonLimparDoador" layoutX="377.0" layoutY="450.0" mnemonicParsing="false" onAction="#buttonLimparDoadorClicado" text="Limpar" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Doação">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+      <TableView fx:id="tableViewDoador" layoutY="505.0" prefHeight="357.0" prefWidth="738.0">
+         <columns>
+            <TableColumn prefWidth="75.0" text="Código" />
+            <TableColumn prefWidth="93.0" text="Volume" />
+            <TableColumn prefWidth="98.0" text="Data" />
+            <TableColumn prefWidth="47.0" text="Hora" />
+            <TableColumn prefWidth="188.0" text="Nome Doador" />
+            <TableColumn prefWidth="120.0" text="CPF Doador" />
+            <TableColumn prefWidth="103.0" text="Contato Doador" />
+         </columns>
+      </TableView>
+   </children>
+</AnchorPane>
