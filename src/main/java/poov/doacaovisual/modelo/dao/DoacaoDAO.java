@@ -13,6 +13,7 @@ import java.util.List;
 import poov.doacaovisual.filtro.DoacaoFilter;
 import poov.doacaovisual.modelo.Doacao;
 import poov.doacaovisual.modelo.Situacao;
+import poov.doacaovisual.modelo.TipoSanguineo;
 
 public class DoacaoDAO {
 
@@ -20,6 +21,25 @@ public class DoacaoDAO {
 
     public DoacaoDAO(Connection conexao) {
         this.conexao = conexao;
+    }
+
+    public List<Doacao> buscarDoacoesPorTipoSanguineo(TipoSanguineo tipoSanguineo) {
+        List<Doacao> doacoes = new ArrayList<>();
+        String sql = "SELECT * FROM doacoes WHERE tipo_sanguineo = ?";
+        try (Connection conn = ConexaoFactory.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, tipoSanguineo.name());
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Doacao doacao = new Doacao();
+                    gravar(doacao);
+                    doacoes.add(doacao);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return doacoes;
     }
 
     public void gravar(Doacao doacao) throws SQLException {
