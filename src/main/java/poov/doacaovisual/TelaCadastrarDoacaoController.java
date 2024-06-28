@@ -2,6 +2,7 @@ package poov.doacaovisual;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -42,12 +43,34 @@ public class TelaCadastrarDoacaoController {
 
     @FXML
     void buttonCadastrarDoacaoClicado(ActionEvent event) {
+        if (validarCampos()) {
+            valido = true;
+            doacao = new Doacao(textFieldVolume.getText(), textFieldHoraDoacao.getText(), datePickerDataDoacao.getValue());
+            ((Button)event.getSource()).getScene().getWindow().hide();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Aviso");
+            alert.setContentText("Um dos campos está vazio");
+            alert.showAndWait();
+        }
+    }
 
+    private boolean validarCampos() {
+        return !textFieldVolume.getText().isEmpty() &&
+               !textFieldHoraDoacao.getText().isEmpty() &&
+               !(datePickerDataDoacao.getValue() == null);
     }
 
     @FXML
     void buttonFecharTelaClicado(ActionEvent event) {
 
+    }
+
+    public void limpar() {
+        valido = false;
+        textFieldHoraDoacao.clear();
+        textFieldVolume.clear();
+        datePickerDataDoacao.setValue(null);
     }
 
     public Doacao getDoacao() {

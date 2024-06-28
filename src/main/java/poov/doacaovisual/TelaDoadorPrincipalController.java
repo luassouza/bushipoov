@@ -24,7 +24,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import poov.doacaovisual.filtro.DoacaoFilter;
 import poov.doacaovisual.filtro.DoadorFilter;
 import poov.doacaovisual.modelo.Doacao;
 import poov.doacaovisual.modelo.Doador;
@@ -106,6 +105,46 @@ public class TelaDoadorPrincipalController {
     @FXML
     private TextField textFieldNomeDoador;
 
+    // indica que os dados da janela sao validos
+    private boolean valido = false;
+
+    public Doador getDoador() {
+        return doador;
+    }
+
+    public boolean isValido() {
+        return valido;
+    }
+
+    private boolean validarCampos() {
+        return !textFieldNomeDoador.getText().isEmpty() &&
+                !textFieldCPFDoador.getText().isEmpty() &&
+                !textFieldContatoDoador.getText().isEmpty();
+    }
+
+    public void limpar() {
+        valido = false;
+        textFieldNomeDoador.clear();
+        textFieldCPFDoador.clear();
+        textFieldContatoDoador.clear();
+    }
+
+    private Stage stageTelaCadastrarDoador;
+    private TelaCadastrarDoadorController controllerTelaCadastrarDoador;
+
+    private Stage stageTelaAlterarDoador;
+    private TelaAlterarDoadorController controllerTelaAlterarDoador;
+
+    private Stage stageTelaDoacaoPrincipal;
+    private TelaDoacaoPrincipalController controllerTelaPrincipalDoacao;
+
+    private Stage stageTelaCadastrarDoacao;
+    private TelaCadastrarDoacaoController controllerTelaCadastrarDoacao;
+
+    private Doador doador;
+    private DAOFactory daoFactory;
+    private Doacao doacao;
+
     @FXML
     void buttonAlterarDoadorClicado(ActionEvent event) {
         Doador doador = tableViewDoador.getSelectionModel().getSelectedItem();
@@ -162,9 +201,6 @@ public class TelaDoadorPrincipalController {
             DAOFactory.mostrarSQLException(e);
         }
     }
-
-    private Stage stageTelaCadastrarDoacao;
-    private TelaCadastrarDoacaoController controllerTelaCadastrarDoacao;
 
     @FXML
     void buttonCadastrarDoacaoClicado(ActionEvent event) {
@@ -301,19 +337,6 @@ public class TelaDoadorPrincipalController {
     void radioButtonQualquerTipoClicado(ActionEvent event) {
 
     }
-
-    private Stage stageTelaCadastrarDoador;
-    private TelaCadastrarDoadorController controllerTelaCadastrarDoador;
-
-    private Stage stageTelaAlterarDoador;
-    private TelaAlterarDoadorController controllerTelaAlterarDoador;
-
-    private Stage stageTelaDoacaoPrincipal;
-    private TelaDoacaoPrincipalController controllerTelaPrincipalDoacao;
-
-    private Doador doador;
-    private DAOFactory daoFactory;
-    private Doacao doacao;
 
     public TelaDoadorPrincipalController() {
         System.out.println("Construtor da TelaDoadorPrincipalController executado");

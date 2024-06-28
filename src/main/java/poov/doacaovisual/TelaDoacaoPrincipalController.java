@@ -88,6 +88,13 @@ public class TelaDoacaoPrincipalController {
         return valido;
     }
 
+    public void limpar() {
+        valido = false;
+        textFieldNomeDoador.clear();
+        textFieldCPFDoador.clear();
+        textFieldContatoDoador.clear();
+    }
+
     @FXML
     void buttonBuscarDoadorClicado(ActionEvent event) {
 

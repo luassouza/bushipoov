@@ -20,6 +20,11 @@ public class Doador {
         this.nome = nome;
         this.cpf = cpf;
     }
+    public Doador(String nome, String cpf, String contato) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.contato = contato;
+    }
 
     public Doador(String nome, Long codigo, String cpf) {
         this.nome = nome;
