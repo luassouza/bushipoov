@@ -10,9 +10,10 @@ public class Doacao {
     private LocalTime hora;
     private Double volume;
     private Situacao situacao = Situacao.ATIVO;
+
     public Doacao() {
     }
-    
+
     public Doacao(Long codigo) {
         this.codigo = codigo;
     }
@@ -55,44 +56,57 @@ public class Doacao {
     public Long getCodigo() {
         return codigo;
     }
+
     public void setCodigo(Long codigo) {
         this.codigo = codigo;
     }
+
     public Doador getDoador() {
         return doador;
     }
+
     public void setDoador(Doador doador) {
         this.doador = doador;
     }
+
     public LocalDate getData() {
         return data;
     }
+
     public void setData(LocalDate data) {
         this.data = data;
     }
+
     public LocalTime getHora() {
         return hora;
     }
+
     public void setHora(LocalTime hora) {
         this.hora = hora;
     }
+
     public Double getVolume() {
         return volume;
     }
+
     public void setVolume(Double volume) {
         this.volume = volume;
     }
+
     public Situacao getSituacao() {
         return situacao;
     }
+
     public void setSituacao(Situacao situacao) {
         this.situacao = situacao;
     }
+
     @Override
     public String toString() {
         return "Doacao [codigo=" + codigo + ", doador=" + doador + ", data=" + data + ", hora=" + hora + ", volume="
                 + volume + ", situacao=" + situacao + "]";
     }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -100,6 +114,7 @@ public class Doacao {
         result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -117,5 +132,4 @@ public class Doacao {
         return true;
     }
 
-    
 }

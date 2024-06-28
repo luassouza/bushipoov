@@ -45,8 +45,9 @@ public class TelaCadastrarDoacaoController {
     void buttonCadastrarDoacaoClicado(ActionEvent event) {
         if (validarCampos()) {
             valido = true;
-            doacao = new Doacao(textFieldVolume.getText(), textFieldHoraDoacao.getText(), datePickerDataDoacao.getValue());
-            ((Button)event.getSource()).getScene().getWindow().hide();
+            doacao = new Doacao(textFieldVolume.getText(), textFieldHoraDoacao.getText(),
+                    datePickerDataDoacao.getValue());
+            ((Button) event.getSource()).getScene().getWindow().hide();
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Aviso");
@@ -57,8 +58,8 @@ public class TelaCadastrarDoacaoController {
 
     private boolean validarCampos() {
         return !textFieldVolume.getText().isEmpty() &&
-               !textFieldHoraDoacao.getText().isEmpty() &&
-               !(datePickerDataDoacao.getValue() == null);
+                !textFieldHoraDoacao.getText().isEmpty() &&
+                !(datePickerDataDoacao.getValue() == null);
     }
 
     @FXML

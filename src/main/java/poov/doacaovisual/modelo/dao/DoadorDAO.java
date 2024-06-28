@@ -159,7 +159,6 @@ public class DoadorDAO {
         rs.close();
         pstmt.close();
         return doadores;
-    }
 
         System.out.println(query);
         PreparedStatement pstmt = conexao.prepareStatement(query);
