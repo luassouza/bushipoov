@@ -1,5 +1,8 @@
 package poov.doacaovisual;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -45,8 +48,17 @@ public class TelaCadastrarDoacaoController {
     void buttonCadastrarDoacaoClicado(ActionEvent event) {
         if (validarCampos()) {
             valido = true;
-            doacao = new Doacao(textFieldVolume.getText(), textFieldHoraDoacao.getText(),
-                    datePickerDataDoacao.getValue());
+            // Converte o volume para Double
+            Double volume = Double.parseDouble(textFieldVolume.getText());
+
+            // Converte a hora de doação para LocalTime
+            LocalTime horaDoacao = LocalTime.parse(textFieldHoraDoacao.getText());
+
+            // Obtém a data de doação do DatePicker
+            LocalDate dataDoacao = datePickerDataDoacao.getValue();
+
+            // Cria a nova doação com os tipos corretos
+            doacao = new Doacao(volume, dataDoacao, horaDoacao);
             ((Button) event.getSource()).getScene().getWindow().hide();
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

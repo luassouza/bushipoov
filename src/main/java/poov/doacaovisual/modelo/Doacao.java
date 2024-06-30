@@ -29,6 +29,12 @@ public class Doacao {
         this.hora = hora;
     }
 
+    public Doacao(Double volume, LocalDate data, LocalTime hora) {
+        this.volume = volume;
+        this.data = data;
+        this.hora = hora;
+    }
+
     public Doacao(Long codigo, LocalDate data, LocalTime hora, Double volume) {
         this.codigo = codigo;
         this.data = data;

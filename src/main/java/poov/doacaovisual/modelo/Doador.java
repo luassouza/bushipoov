@@ -12,24 +12,9 @@ public class Doador {
 
     public Doador() {
         nome = "sem nome";
+        codigo = null;
         cpf = "sem cpf";
         contato = "sem contato";
-    }
-
-    public Doador(String nome, String cpf) {
-        this.nome = nome;
-        this.cpf = cpf;
-    }
-    public Doador(String nome, String cpf, String contato) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.contato = contato;
-    }
-
-    public Doador(String nome, Long codigo, String cpf) {
-        this.nome = nome;
-        this.codigo = codigo;
-        this.cpf = cpf;
     }
 
     public Doador(String nome, Long codigo, String cpf, String contato) {
@@ -39,12 +24,12 @@ public class Doador {
         this.contato = contato;
     }
 
-    public Doador(String nome, Long codigo, String cpf, String contato, Boolean tipoERhCorretos) {
+    public Doador(String nome, Long codigo, String cpf, String contato, Situacao situacao) {
         this.nome = nome;
         this.codigo = codigo;
         this.cpf = cpf;
         this.contato = contato;
-        this.tipoERhCorretos = tipoERhCorretos;
+        this.situacao = situacao;
     }
 
     public Doador(String nome, Long codigo, String cpf, String contato, Boolean tipoERhCorretos, Situacao situacao) {
