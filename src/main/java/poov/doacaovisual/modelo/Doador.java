@@ -11,10 +11,12 @@ public class Doador {
     private RH rh = RH.DESCONHECIDO;
 
     public Doador() {
-        nome = "sem nome";
-        codigo = null;
-        cpf = "sem cpf";
-        contato = "sem contato";
+    }
+
+    public Doador(String nome, String cpf, String contato) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.contato = contato;
     }
 
     public Doador(String nome, Long codigo, String cpf, String contato) {

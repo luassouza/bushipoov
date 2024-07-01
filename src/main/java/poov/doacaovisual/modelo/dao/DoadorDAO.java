@@ -27,11 +27,11 @@ public class DoadorDAO {
         PreparedStatement pstmt = conexao.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
         pstmt.setString(1, doador.getNome());
         pstmt.setLong(2, doador.getCodigo());
-        pstmt.setString(3, doador.getCpf());
-        pstmt.setString(4, doador.getContato());
+        pstmt.setString(2, doador.getCpf());
+        pstmt.setString(3, doador.getContato());
+        pstmt.setString(4, "DESCONHECIDO");
         pstmt.setString(5, "DESCONHECIDO");
-        pstmt.setString(6, "DESCONHECIDO");
-        pstmt.setString(7, "ATIVO");
+        pstmt.setString(6, "ATIVO");
 
         int numInseridos = pstmt.executeUpdate();
         if (numInseridos == 1) {

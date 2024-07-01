@@ -3,6 +3,7 @@ package poov.doacaovisual;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -26,6 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import poov.doacaovisual.filtro.DoadorFilter;
 import poov.doacaovisual.modelo.Doacao;
 import poov.doacaovisual.modelo.Doador;
 import poov.doacaovisual.modelo.RH;
@@ -158,7 +160,10 @@ public class TelaDoadorPrincipalController implements Initializable {
     private TextField textFieldVolumeSup;
 
     @FXML
-    private ToggleGroup tipoSanguineoToggleGroup2;
+    private ToggleGroup tipoSanguineoToggleGroup;
+
+    @FXML
+    private ToggleGroup RHToggleGroup;
 
     private Doador doador;
     private DAOFactory daoFactory;
@@ -167,9 +172,6 @@ public class TelaDoadorPrincipalController implements Initializable {
         System.out.println("Construtor da TelaDoadorPrincipalController executado");
         daoFactory = new DAOFactory();
     }
-
-    // private Stage stageTelaDoadorPrincipal;
-    // private TelaDoadorPrincipalController controllerTelaDoadorPrincipal;
 
     private Stage stageTelaCadastrarDoador;
     private TelaCadastrarDoadorController controllerTelaCadastrarDoador;
@@ -182,8 +184,6 @@ public class TelaDoadorPrincipalController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // FXMLLoader loaderPrincipal = new FXMLLoader(
-        //         getClass().getResource("/poov/doacaovisual/TelaDoadorPrincipal.fxml"));
         FXMLLoader loaderCadastrarDoador = new FXMLLoader(
                 getClass().getResource("/poov/doacaovisual/TelaCadastrarDoador.fxml"));
         FXMLLoader loaderCadastrarDoacao = new FXMLLoader(
@@ -192,14 +192,6 @@ public class TelaDoadorPrincipalController implements Initializable {
                 getClass().getResource("/poov/doacaovisual/TelaAlterarDoador.fxml"));
         Parent root;
         try {
-            // root = loaderPrincipal.load();
-            // Scene scene = new Scene(root);
-            // stageTelaDoadorPrincipal = new Stage();
-            // stageTelaDoadorPrincipal.setScene(scene);
-            // stageTelaDoadorPrincipal.setTitle("Tela Principal");
-            // stageTelaDoadorPrincipal.getIcons().add(new Image(getClass().getResourceAsStream("/images/java.png")));
-            // stageTelaDoadorPrincipal.initModality(Modality.WINDOW_MODAL);
-            // controllerTelaDoadorPrincipal = loaderPrincipal.getController();
 
             root = loaderCadastrarDoador.load();
             Scene scene = new Scene(root);
@@ -239,12 +231,50 @@ public class TelaDoadorPrincipalController implements Initializable {
 
     @FXML
     void buttonAlterarDoadorClicado(ActionEvent event) {
-
+        if (stageTelaAlterarDoador.getOwner() == null) {
+            stageTelaAlterarDoador.initOwner(((Node) event.getSource()).getScene().getWindow());
+        }
+        controllerTelaAlterarDoador.limpar();
+        stageTelaAlterarDoador.showAndWait();
+        if (controllerTelaAlterarDoador.isValido()) {
+            Doador doador = controllerTelaAlterarDoador.getDoador();
+            try {
+                daoFactory.abrirConexao();
+                DoadorDAO dao = daoFactory.criarDoadorDAO();
+                dao.gravar(doador);
+                daoFactory.fecharConexao();
+            } catch (SQLException e) {
+                DAOFactory.mostrarSQLException(e);
+            }
+        }
     }
 
     @FXML
     void buttonBuscarDoadorClicado(ActionEvent event) {
+        DoadorFilter filtro = new DoadorFilter();
+        if (!textFieldCodigoDoador.getText().trim().isEmpty()) {
+            filtro.setCodigo(Long.parseLong(textFieldCodigoDoador.getText()));
+        }
+        if (!textFieldNomeDoador.getText().trim().isEmpty()) {
+            filtro.setNome(textFieldNomeDoador.getText());
+        }
+        if (!textFieldCPFDoador.getText().trim().isEmpty()) {
+            filtro.setCpf(textFieldCPFDoador.getText());
+        }
+        if (!textFieldContatoDoador.getText().trim().isEmpty()) {
+            filtro.setContato(textFieldContatoDoador.getText());
+        }
 
+        try {
+            daoFactory.abrirConexao();
+            DoadorDAO dao = daoFactory.criarDoadorDAO();
+            List<Doador> doadores = dao.buscar(filtro);
+            tableViewDoador.getItems().clear();
+            tableViewDoador.getItems().addAll(doadores);
+            daoFactory.fecharConexao();
+        } catch (SQLException e) {
+            DAOFactory.mostrarSQLException(e);
+        }
     }
 
     @FXML

@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +71,13 @@ public class DoacaoDAO {
         pstmt.setLong(1, codigo);
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
-            doacao = new Doacao(rs.getLong(1), rs.getDate(2), rs.getTime(3), rs.getDouble(4));
+        Long cod = rs.getLong("codigo");
+        LocalDate data = rs.getDate("data_doacao").toLocalDate();
+        LocalTime hora = rs.getTime("hora_doacao").toLocalTime();
+        Double volume = rs.getDouble("volume");
+        // Cria a nova doação com os tipos corretos
+        doacao = new Doacao(cod, data, hora, volume);
+            // doacao = new Doacao(rs.getLong(1), rs.getDate(2), rs.getTime(3), rs.getDouble(4));
         }
         rs.close();
         pstmt.close();
@@ -86,7 +94,11 @@ public class DoacaoDAO {
         Situacao situacao;
         while (rs.next()) {
             situacao = rs.getString(5).equals("ATIVO") ? Situacao.ATIVO : Situacao.INATIVO;
-            doacao = new Doacao(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), situacao);
+            Long cod = rs.getLong("codigo");
+            LocalDate data = rs.getDate("data_doacao").toLocalDate();
+            LocalTime hora = rs.getTime("hora_doacao").toLocalTime();
+            Double volume = rs.getDouble("volume");
+            doacao = new Doacao(cod, data, hora, volume, situacao);
             doacoes.add(doacao);
         }
         rs.close();
@@ -101,7 +113,11 @@ public class DoacaoDAO {
         Statement stmt = conexao.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         while (rs.next()) {
-            doacao = new Doacao(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4));
+            Long cod = rs.getLong("codigo");
+            LocalDate data = rs.getDate("data_doacao").toLocalDate();
+            LocalTime hora = rs.getTime("hora_doacao").toLocalTime();
+            Double volume = rs.getDouble("volume");
+            doacao = new Doacao(cod, data, hora, volume);
             doacoes.add(doacao);
         }
         rs.close();
@@ -145,7 +161,11 @@ public class DoacaoDAO {
         }
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
-            doacao = new Doacao(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4));
+            Long cod = rs.getLong("codigo");
+            LocalDate data = rs.getDate("data_doacao").toLocalDate();
+            LocalTime hora = rs.getTime("hora_doacao").toLocalTime();
+            Double volume = rs.getDouble("volume");
+            doacao = new Doacao(cod, data, hora, volume);
             doacoes.add(doacao);
         }
         rs.close();

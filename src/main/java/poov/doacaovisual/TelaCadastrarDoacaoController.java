@@ -76,7 +76,8 @@ public class TelaCadastrarDoacaoController {
 
     @FXML
     void buttonFecharTelaClicado(ActionEvent event) {
-
+        valido = false;
+        ((Button) event.getSource()).getScene().getWindow().hide();
     }
 
     public void limpar() {
