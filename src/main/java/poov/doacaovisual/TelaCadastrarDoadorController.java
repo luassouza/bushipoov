@@ -1,50 +1,53 @@
 package poov.doacaovisual;
 
-import java.util.List;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import poov.doacaovisual.modelo.Doacao;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleGroup;
 import poov.doacaovisual.modelo.Doador;
-import poov.doacaovisual.modelo.TipoSanguineo;
+import poov.doacaovisual.modelo.dao.TipoSanguineo;
 
-public class TelaCadastrarDoadorController {
+public class TelaCadastroDoadorController {
+
+    @FXML
+    private ToggleGroup RH;
+
+    @FXML
+    private ToggleGroup TipoSanguineo;
 
     @FXML
     private Button buttonCadastrarDoador;
 
     @FXML
-    private Button buttonFecharTela;
+    private Button buttonCancelarCadastrarDoador;
 
     @FXML
-    private RadioButton radioButtonBusA;
+    private RadioButton radioButtonA;
 
     @FXML
-    private RadioButton radioButtonBusAB;
+    private RadioButton radioButtonAB;
 
     @FXML
-    private RadioButton radioButtonBusB;
+    private RadioButton radioButtonB;
 
     @FXML
-    private RadioButton radioButtonBusMinus;
+    private RadioButton radioButtonDesconhecido;
 
     @FXML
-    private RadioButton radioButtonBusO;
+    private RadioButton radioButtonDesconhecidoRH;
 
     @FXML
-    private RadioButton radioButtonBusPlus;
+    private RadioButton radioButtonNegativoRH;
 
     @FXML
-    private RadioButton radioButtonBusRHDesconhecido;
+    private RadioButton radioButtonO;
 
     @FXML
-    private RadioButton radioButtonBusSangueDesconhecido;
+    private RadioButton radioButtonPositivoRH;
 
     @FXML
     private TextField textFieldCPFDoador;
@@ -55,22 +58,59 @@ public class TelaCadastrarDoadorController {
     @FXML
     private TextField textFieldNomeDoador;
 
-    // indica que os dados da janela sao validos
+    @FXML
+    private TitledPane titledPaneTipoSanguineo;
+
     private boolean valido = false;
 
-    // guarda os dados entrados pelo usuario
+    public boolean isValido() {
+        return valido;
+    }
+
+    public Doador getDoador() {
+        return doador;
+    }
+
     private Doador doador;
 
-    public TelaCadastrarDoadorController() {
-        System.out.println("Construtor da TelaCadastrarDoadorController executado");
+    public void limpar() {
+        valido = false;
+        textFieldNomeDoador.clear();
+        textFieldCPFDoador.clear();
+        textFieldContatoDoador.clear();
+    }
+
+    private boolean validarCampos() {
+        return !textFieldNomeDoador.getText().isEmpty() &&
+                !textFieldCPFDoador.getText().isEmpty()
+                && !textFieldContatoDoador.getText().isEmpty();
     }
 
     @FXML
     void buttonCadastrarDoadorClicado(ActionEvent event) {
         if (validarCampos()) {
             valido = true;
-            doador = new Doador(textFieldNomeDoador.getText(), textFieldCPFDoador.getText(),
+            doador = new Doador(textFieldNomeDoador.getText(),
+                    textFieldCPFDoador.getText(),
                     textFieldContatoDoador.getText());
+            if (!radioButtonDesconhecido.isSelected()) {
+                if (radioButtonA.isSelected()) {
+                    doador.setTipoSanguineo(poov.doacaovisual.modelo.dao.TipoSanguineo.A);
+                } else if (radioButtonB.isSelected()) {
+                    doador.setTipoSanguineo(poov.doacaovisual.modelo.dao.TipoSanguineo.B);
+                } else if (radioButtonAB.isSelected()) {
+                    doador.setTipoSanguineo(poov.doacaovisual.modelo.dao.TipoSanguineo.AB);
+                } else if (radioButtonO.isSelected()) {
+                    doador.setTipoSanguineo(poov.doacaovisual.modelo.dao.TipoSanguineo.O);
+                }
+            }
+            if ((!radioButtonDesconhecidoRH.isSelected())) {
+                if (radioButtonNegativoRH.isSelected()) {
+                    doador.setRh(poov.doacaovisual.modelo.dao.RH.NEGATIVO);
+                } else if (radioButtonPositivoRH.isSelected()) {
+                    doador.setRh(poov.doacaovisual.modelo.dao.RH.POSITIVO);
+                }
+            }
             ((Button) event.getSource()).getScene().getWindow().hide();
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -81,70 +121,9 @@ public class TelaCadastrarDoadorController {
     }
 
     @FXML
-    void buttonFecharTelaClicado(ActionEvent event) {
+    void buttonCancelarCadastrarDoadorClicado(ActionEvent event) {
         valido = false;
         ((Button) event.getSource()).getScene().getWindow().hide();
-    }
-
-    public Doador getDoador() {
-        return doador;
-    }
-
-    public boolean isValido() {
-        return valido;
-    }
-
-    private boolean validarCampos() {
-        return !textFieldNomeDoador.getText().isEmpty() &&
-                !textFieldCPFDoador.getText().isEmpty() &&
-                !textFieldContatoDoador.getText().isEmpty();
-    }
-
-    public void limpar() {
-        valido = false;
-        textFieldNomeDoador.clear();
-        textFieldCPFDoador.clear();
-        textFieldContatoDoador.clear();
-    }
-
-    @FXML
-    void radioButtonBusABClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonBusAClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonBusBClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonBusMinusClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonBusOClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonBusPlusClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonBusRHDesconhecidoClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonBusSangueDesconhecidoClicado(ActionEvent event) {
-
-    }
+    }
 
 }
