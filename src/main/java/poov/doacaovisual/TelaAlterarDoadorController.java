@@ -7,39 +7,50 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleGroup;
 import poov.doacaovisual.modelo.Doador;
 
 public class TelaAlterarDoadorController {
 
     @FXML
+    private ToggleGroup RH;
+
+    @FXML
+    private ToggleGroup TipoSanguineo;
+
+    @FXML
     private Button buttonAlterarDoador;
 
     @FXML
-    private Button buttonFecharTela;
+    private Button buttonFecharAlterarDoador;
 
     @FXML
-    private CheckBox checkButtonCorreto;
+    private CheckBox checkBBoxConfirmacao;
 
     @FXML
-    private RadioButton radioButtonAltA;
+    private RadioButton radioButtonA;
 
     @FXML
-    private RadioButton radioButtonAltAB;
+    private RadioButton radioButtonAB;
 
     @FXML
-    private RadioButton radioButtonAltB;
+    private RadioButton radioButtonB;
 
     @FXML
-    private RadioButton radioButtonAltDesconhecido;
+    private RadioButton radioButtonDesconhecidoRH;
 
     @FXML
-    private RadioButton radioButtonAltMinus;
+    private RadioButton radioButtonDesconhecidoTipo;
 
     @FXML
-    private RadioButton radioButtonAltO;
+    private RadioButton radioButtonNegativoRH;
 
     @FXML
-    private RadioButton radioButtonAltPlus;
+    private RadioButton radioButtonO;
+
+    @FXML
+    private RadioButton radioButtonPositivoRH;
 
     @FXML
     private TextField textFieldCPFDoador;
@@ -49,6 +60,12 @@ public class TelaAlterarDoadorController {
 
     @FXML
     private TextField textFieldNomeDoador;
+
+    @FXML
+    private TitledPane titledPaneRH;
+
+    @FXML
+    private TitledPane titledPaneTipoSanguineo;
 
     // indica que os dados da janela sao validos
     private boolean valido = false;
@@ -60,9 +77,58 @@ public class TelaAlterarDoadorController {
     void buttonAlterarDoadorClicado(ActionEvent event) {
         if (validarCampos()) {
             valido = true;
-            doador = new Doador(textFieldNomeDoador.getText(), textFieldCPFDoador.getText(),
-                    textFieldContatoDoador.getText());
-            ((Button) event.getSource()).getScene().getWindow().hide();
+            doador.setNome(textFieldNomeDoador.getText());
+            doador.setContato(textFieldContatoDoador.getText());
+            doador.setCpf(textFieldCPFDoador.getText());
+
+            if (doador.getTipoSanguineo().getDescricao().equals("O")) {
+                radioButtonO.setSelected(true);
+            } else if (doador.getTipoSanguineo().getDescricao().equals("A")) {
+                radioButtonA.setSelected(true);
+            } else if (doador.getTipoSanguineo().getDescricao().equals("AB")) {
+                radioButtonAB.setSelected(true);
+            } else if (doador.getTipoSanguineo().getDescricao().equals("B")) {
+                radioButtonB.setSelected(true);
+            }
+            if (doador.getRh().getDescricao().equals("Negativo")) {
+                radioButtonNegativoRH.setSelected(true);
+            } else if (doador.getRh().getDescricao().equals("Positivo")) {
+                radioButtonPositivoRH.setSelected(true);
+            }
+
+            if (!radioButtonDesconhecidoTipo.isSelected()) {
+                if (radioButtonA.isSelected()) {
+                    doador.setTipoSanguineo(poov.doacaovisual.modelo.dao.TipoSanguineo.A);
+                } else if (radioButtonB.isSelected()) {
+                    doador.setTipoSanguineo(poov.doacaovisual.modelo.dao.TipoSanguineo.B);
+                } else if (radioButtonAB.isSelected()) {
+                    doador.setTipoSanguineo(poov.doacaovisual.modelo.dao.TipoSanguineo.AB);
+                } else if (radioButtonO.isSelected()) {
+                    doador.setTipoSanguineo(poov.doacaovisual.modelo.dao.TipoSanguineo.O);
+                }
+            } else {
+                doador.setTipoSanguineo(poov.doacaovisual.modelo.dao.TipoSanguineo.DESCONHECIDO);
+            }
+            if (!radioButtonDesconhecidoRH.isSelected()) {
+                if (radioButtonNegativoRH.isSelected()) {
+                    doador.setRh(poov.doacaovisual.modelo.dao.RH.NEGATIVO);
+                } else if (radioButtonPositivoRH.isSelected()) {
+                    doador.setRh(poov.doacaovisual.modelo.dao.RH.POSITIVO);
+                }
+            } else {
+                doador.setRh(poov.doacaovisual.modelo.dao.RH.DESCONHECIDO);
+            }
+
+            if (checkBBoxConfirmacao.isSelected()) {
+                ((Button) event.getSource()).getScene().getWindow().hide();
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("Aviso");
+                alert.setContentText("Corrija os valores");
+                alert.showAndWait();
+            }
+
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Aviso");
@@ -72,9 +138,13 @@ public class TelaAlterarDoadorController {
     }
 
     @FXML
-    void buttonFecharTelaClicado(ActionEvent event) {
+    void buttonFecharAlterarDoadorClicado(ActionEvent event) {
         valido = false;
         ((Button) event.getSource()).getScene().getWindow().hide();
+    }
+
+    public boolean isValido() {
+        return valido;
     }
 
     public Doador getDoador() {
@@ -84,19 +154,29 @@ public class TelaAlterarDoadorController {
     public void setDoador(Doador doador) {
         this.doador = doador;
         textFieldNomeDoador.setText(doador.getNome());
-        textFieldCPFDoador.setText(doador.getCpf());
         textFieldContatoDoador.setText(doador.getContato());
+        textFieldCPFDoador.setText(doador.getCpf());
+        if (doador.getTipoSanguineo().getDescricao().equals("O")) {
+            radioButtonO.setSelected(true);
+        } else if (doador.getTipoSanguineo().getDescricao().equals("A")) {
+            radioButtonA.setSelected(true);
+        } else if (doador.getTipoSanguineo().getDescricao().equals("AB")) {
+            radioButtonAB.setSelected(true);
+        } else if (doador.getTipoSanguineo().getDescricao().equals("B")) {
+            radioButtonB.setSelected(true);
+        }
+        if (doador.getRh().getDescricao().equals("Negativo")) {
+            radioButtonNegativoRH.setSelected(true);
+        } else if (doador.getRh().getDescricao().equals("Positivo")) {
+            radioButtonPositivoRH.setSelected(true);
+        }
         valido = false;
-    }
-
-    public boolean isValido() {
-        return valido;
     }
 
     private boolean validarCampos() {
         return !textFieldNomeDoador.getText().isEmpty() &&
-                !textFieldCPFDoador.getText().isEmpty() &&
-                !textFieldContatoDoador.getText().isEmpty();
+                !textFieldCPFDoador.getText().isEmpty()
+                && !textFieldContatoDoador.getText().isEmpty();
     }
 
     public void limpar() {
@@ -104,46 +184,7 @@ public class TelaAlterarDoadorController {
         textFieldNomeDoador.clear();
         textFieldCPFDoador.clear();
         textFieldContatoDoador.clear();
-    }
-
-    @FXML
-    void checkButtonCorretoClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonAltABClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonAltAClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonAltBClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonAltDesconhecidoClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonAltMinusClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonAltOClicado(ActionEvent event) {
-
-    }
-
-    @FXML
-    void radioButtonAltPlusClicado(ActionEvent event) {
-
-    }
-
+        radioButtonDesconhecidoRH.setSelected(true);
+        radioButtonDesconhecidoTipo.setSelected(true);
+    }
 }
