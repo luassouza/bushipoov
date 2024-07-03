@@ -9,13 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import poov.doacaovisual.filtro.DoadorFilter;
-import poov.doacaovisual.modelo.Situacao;
-import poov.doacaovisual.modelo.TipoSanguineo;
 import poov.doacaovisual.modelo.Doador;
-import poov.doacaovisual.modelo.RH;
+import poov.doacaovisual.modelo.Situacao;
 
 public class DoadorDAO {
-
     private final Connection conexao;
 
     public DoadorDAO(Connection conexao) {
@@ -23,15 +20,13 @@ public class DoadorDAO {
     }
 
     public void gravar(Doador doador) throws SQLException {
-        String query = "INSERT INTO doador (nome, codigo, cpf, contato, tiposanguineo, rh, situacao) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO doador (nome, cpf, contato, tipo, rh) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement pstmt = conexao.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
         pstmt.setString(1, doador.getNome());
-        pstmt.setLong(2, doador.getCodigo());
         pstmt.setString(2, doador.getCpf());
         pstmt.setString(3, doador.getContato());
-        pstmt.setString(4, "DESCONHECIDO");
-        pstmt.setString(5, "DESCONHECIDO");
-        pstmt.setString(6, "ATIVO");
+        pstmt.setString(4, doador.getTipoSanguineo().getDescricao());
+        pstmt.setString(5, doador.getRh().getDescricao());
 
         int numInseridos = pstmt.executeUpdate();
         if (numInseridos == 1) {
@@ -46,55 +41,39 @@ public class DoadorDAO {
 
     public Doador buscar(long codigo) throws SQLException {
         Doador doador = null;
-        String query = "SELECT * FROM doador WHERE codigo = ? AND situacao = 'ATIVO'";
+        String query = "SELECT * FROM doador WHERE codigo = ? AND situacao = 'Ativo'";
         PreparedStatement pstmt = conexao.prepareStatement(query);
         pstmt.setLong(1, codigo);
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
-            doador = new Doador(rs.getString(1), rs.getLong(2), rs.getString(3), rs.getString(4));
+            doador = new Doador(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4));
+            if (rs.getString(6).equals("A")) {
+                doador.setTipoSanguineo(TipoSanguineo.A);
+            } else if (rs.getString(6).equals("B")) {
+                doador.setTipoSanguineo(TipoSanguineo.B);
+            } else if (rs.getString(6).equals("AB")) {
+                doador.setTipoSanguineo(TipoSanguineo.AB);
+            } else if (rs.getString(6).equals("O")) {
+                doador.setTipoSanguineo(TipoSanguineo.O);
+            }
+
+            if (rs.getString(7).equals("Positivo")) {
+                doador.setRh(RH.POSITIVO);
+            } else if (rs.getString(7).equals("Negativo")) {
+                doador.setRh(RH.NEGATIVO);
+            }
+
         }
         rs.close();
         pstmt.close();
         return doador;
     }
 
-    public List<Doador> buscar(String nome) throws SQLException {
-        Doador doador;
-        List<Doador> doadores = new ArrayList<>();
-        String sqlBusca = "SELECT * FROM doador WHERE UPPER(nome) LIKE ? AND situacao = 'ATIVO'";
-        PreparedStatement pstmtBusca = conexao.prepareStatement(sqlBusca);
-        pstmtBusca.setString(1, "%" + nome.toUpperCase() + "%");
-        ResultSet rs = pstmtBusca.executeQuery();
-        Situacao situacao;
-        while (rs.next()) {
-            situacao = rs.getString(6).equals("ATIVO") ? Situacao.ATIVO : Situacao.INATIVO;
-            doador = new Doador(rs.getString(1), rs.getLong(2), rs.getString(3), rs.getString(4));
-            doadores.add(doador);
-        }
-        rs.close();
-        pstmtBusca.close();
-        return doadores;
-    }
-
-    public List<Doador> buscarTodas() throws SQLException {
-        Doador doador;
-        List<Doador> doadores = new ArrayList<>();
-        String sql = "SELECT * FROM doador WHERE situacao = 'ATIVO'";
-        Statement stmt = conexao.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
-        while (rs.next()) {
-            doador = new Doador(rs.getString(1), rs.getLong(2), rs.getString(3), rs.getString(4));
-            doadores.add(doador);
-        }
-        rs.close();
-        stmt.close();
-        return doadores;
-    }
 
     public List<Doador> buscar(DoadorFilter filtro) throws SQLException {
         Doador doador = null;
         List<Doador> doadores = new ArrayList<>();
-        String query = "SELECT * FROM doador WHERE situacao = 'Ativo'";
+        String query = "SELECT * FROM doador WHERE situacao = 'Ativo' ";
         if (filtro.getCodigo() != null) {
             query += "AND codigo = ?";
         }
@@ -107,10 +86,10 @@ public class DoadorDAO {
         if (filtro.getContato() != null) {
             query += "AND contato ILIKE ?";
         }
-        if (filtro.getTiposanguineo() != null) {
+        if (filtro.getTipoSanguineo().getDescricao() != "Desconhecido") {
             query += "AND tipo ILIKE ?";
         }
-        if (filtro.getRh() != null) {
+        if (filtro.getRh().getDescricao() != "Desconhecido") {
             query += "AND rh ILIKE ?";
         }
         System.out.println(query);
@@ -130,23 +109,25 @@ public class DoadorDAO {
         if (filtro.getContato() != null) {
             pstmt.setString(cont, "%" + filtro.getContato() + "%");
         }
-        if (filtro.getTiposanguineo() != null) {
-            pstmt.setString(cont, "%" + filtro.getTiposanguineo() + "%");
+        if (filtro.getTipoSanguineo().getDescricao() != "Desconhecido") {
+            pstmt.setString(cont, filtro.getTipoSanguineo().getDescricao());
         }
-        if (filtro.getRh() != null) {
-            pstmt.setString(cont, "%" + filtro.getRh() + "%");
+        if (filtro.getRh().getDescricao() != "Desconhecido") {
+            pstmt.setString(cont, filtro.getRh().getDescricao());
         }
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
-            doador = new Doador(rs.getString(1), rs.getLong(2), rs.getString(3), rs.getString(4));
-            if(rs.getString(5).equals("A")){
-                doador.setTiposanguineo(TipoSanguineo.A);
-            }else if(rs.getString(5).equals("B")){
-                doador.setTiposanguineo(TipoSanguineo.B);
-            }else if(rs.getString(5).equals("AB")){
-                doador.setTiposanguineo(TipoSanguineo.AB);
-            }else if(rs.getString(5).equals("O")){
-                doador.setTiposanguineo(TipoSanguineo.O);
+            doador = new Doador(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4));
+            if(rs.getString(6).equals("A")){
+                doador.setTipoSanguineo(TipoSanguineo.A);
+            }else if(rs.getString(6).equals("B")){
+                doador.setTipoSanguineo(TipoSanguineo.B);
+            }else if(rs.getString(6).equals("AB")){
+                doador.setTipoSanguineo(TipoSanguineo.AB);
+            }else if(rs.getString(6).equals("O")){
+                doador.setTipoSanguineo(TipoSanguineo.O);
+            }else if(rs.getString(6).equals("Desconhecido")){
+                doador.setTipoSanguineo(TipoSanguineo.DESCONHECIDO);
             }
 
             if(rs.getString(7).equals("Positivo")){
@@ -154,34 +135,6 @@ public class DoadorDAO {
             }else if (rs.getString(7).equals("Negativo")){
                 doador.setRh(RH.NEGATIVO);
             }
-            doadores.add(doador);
-        }
-        rs.close();
-        pstmt.close();
-        return doadores;
-
-        System.out.println(query);
-        PreparedStatement pstmt = conexao.prepareStatement(query);
-        int cont = 1;
-        if (filtro.getNome() != null) {
-            pstmt.setString(cont, "%" + filtro.getNome() + "%");
-            cont++;
-        }
-        if (filtro.getCodigo() != null) {
-            pstmt.setLong(cont, filtro.getCodigo());
-            cont++;
-        }
-        if (filtro.getCpf() != null) {
-            pstmt.setString(cont, "%" + filtro.getCpf() + "%");
-            cont++;
-        }
-        if (filtro.getContato() != null) {
-            pstmt.setString(cont, "%" + filtro.getContato() + "%");
-        }
-
-        ResultSet rs = pstmt.executeQuery();
-        while (rs.next()) {
-            doador = new Doador(rs.getString(1), rs.getLong(2), rs.getString(3), rs.getString(4));
             doadores.add(doador);
         }
         rs.close();
@@ -218,18 +171,20 @@ public class DoadorDAO {
     }
 
     public boolean atualizar(Doador doador) throws SQLException {
-        String sqlUpdate = "UPDATE doador SET nome = ?, codigo = ?, cpf = ?, contato = ? WHERE codigo = ?";
+        String sqlUpdate = "UPDATE doador SET nome = ?, cpf = ?, contato = ?, tipo = ?, rh = ? WHERE codigo = ?";
         PreparedStatement pstmtUpdate = conexao.prepareStatement(sqlUpdate);
         pstmtUpdate.setString(1, doador.getNome());
-        pstmtUpdate.setLong(2, doador.getCodigo());
-        pstmtUpdate.setString(3, doador.getCpf());
-        pstmtUpdate.setString(4, doador.getContato());
+        pstmtUpdate.setString(2, doador.getCpf());
+        pstmtUpdate.setString(3, doador.getContato());
+        pstmtUpdate.setString(4, doador.getTipoSanguineo().getDescricao());
+        pstmtUpdate.setString(5, doador.getRh().getDescricao());
+        pstmtUpdate.setLong(6, doador.getCodigo());
         int alterados = pstmtUpdate.executeUpdate();
         pstmtUpdate.close();
         if (alterados == 1) {
             return true;
         } else {
             return false;
-        }
-    }
+        }
+    }
 }
